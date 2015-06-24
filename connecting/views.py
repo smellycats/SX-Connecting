@@ -11,15 +11,18 @@ from app import app, api, auth, logger
 from ping_ip import ping
 
 
-@auth.verify_password
-def verify_password(username, password):
-    return app.config['USER'].get(username,'') == password
+@auth.get_password
+def verify_password(username):
+    if username in app.config['USER']:
+        return app.config['USER'].get(username)
+    return None
 
 
 class Index(Resource):
 
     def get(self):
-        return {'ping_v1_url': 'http://localhost/v1/ping{/addr}'}
+        return {'ping_v1_url': 'http://localhost/v1/ping{/addr}'}, 200,
+        {'Cache-Control': 'public, max-age=60, s-maxage=60'}
 
 
 class PingApiV1(Resource):
@@ -27,10 +30,7 @@ class PingApiV1(Resource):
     @auth.login_required
     def get(self, addr):
         result = ping(addr)
-        try:
-            logger.info('ping %s %s' % (addr, str(result)))
-        except Exception as e:
-            raise
+        logger.info('ping %s %s' % (addr, str(result)))
         return {'addr': addr, 'connect': result}, 200
 
 
