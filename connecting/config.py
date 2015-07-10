@@ -4,6 +4,7 @@ import os
 
 class Config(object):
     DEBUG = True
+    SECRET_KEY = 'hellokitty'
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
     # 主机IP
     HOST = '0.0.0.0'
