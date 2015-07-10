@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-import time
-import logging
-
 from flask import g, request
 from flask_restful import reqparse, abort, Resource
 
@@ -12,7 +8,7 @@ from ping_ip import ping
 
 
 @auth.get_password
-def verify_password(username):
+def get_pw(username):
     if username in app.config['USER']:
         return app.config['USER'].get(username)
     return None
@@ -21,7 +17,8 @@ def verify_password(username):
 class Index(Resource):
 
     def get(self):
-        return {'ping_v1_url': 'http://localhost/v1/ping{/addr}'}, 200,
+        return {'ping_v1_url': 'http://127.0.0.1:%s/v1/ping{/addr}' %
+                app.config['PORT']}, 200,
         {'Cache-Control': 'public, max-age=60, s-maxage=60'}
 
 
