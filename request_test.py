@@ -2,12 +2,12 @@
 
 import json
 import requests
-from requests.auth import HTTPBasicAuth
+from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 
 def send_get(url,headers = {'content-type': 'application/json'}):
     """POST请求"""
     r = requests.get(url, headers=headers,
-                      auth=HTTPBasicAuth('kakou', 'pingworker'))
+                     auth=HTTPDigestAuth('kakou', 'pingworker'))
 
     return r
   
