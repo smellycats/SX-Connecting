@@ -17,19 +17,19 @@ def get_pw(username):
 class Index(Resource):
 
     def get(self):
-        return {'ping_v1_url': 'http://127.0.0.1:%s/v1/ping{/addr}' %
+        return {'ping_url': 'http://127.0.0.1:%s/v1/ping/:ip' %
                 app.config['PORT']}, 200,
         {'Cache-Control': 'public, max-age=60, s-maxage=60'}
 
 
-class PingApiV1(Resource):
+class PingApi(Resource):
 
     @auth.login_required
-    def get(self, addr):
-        result = ping(addr)
-        logger.info('ping %s %s' % (addr, str(result)))
-        return {'addr': addr, 'connect': result}, 200
+    def get(self, ip):
+        result = ping(ip)
+        logger.info('ping %s %s' % (ip, str(result)))
+        return {'ip': ip, 'connect': result}, 200
 
 
 api.add_resource(Index, '/')
-api.add_resource(PingApiV1, '/v1/ping/<string:addr>')
+api.add_resource(PingApi, '/ping/<string:ip>')
