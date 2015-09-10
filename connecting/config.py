@@ -3,18 +3,18 @@ import os
 
 
 class Config(object):
-    DEBUG = True
+    # 密码 string
     SECRET_KEY = 'hellokitty'
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
-    # 主机IP
+    # 主机IP string
     HOST = '0.0.0.0'
-    # 端口
+    # 端口 string
     PORT = '8078'
-    # 用户
+    # 用户 dict
     USER = {'kakou': 'pingworker'}
 
 class Develop(Config):
-    pass
+    DEBUG = True
 
 class Production(Config):
     DEBUG = False
