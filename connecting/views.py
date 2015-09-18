@@ -1,11 +1,21 @@
 # -*- coding: utf-8 -*-
-
+import arrow
 from flask import g, request
 from flask_restful import reqparse, abort, Resource
 
-from app import app, api, auth, logger
-from ping_ip import ping
+from connecting import app, api, auth, logger, access_logger
+import helper_ping
 
+
+@app.after_request
+def after_request(response):
+    """访问信息写入日志"""
+    access_logger.info('%s - - [%s] "%s %s HTTP/1.1" %s %s'
+                       % (request.remote_addr,
+                          arrow.now().format('DD/MMM/YYYY:HH:mm:ss ZZ'),
+                          request.method, request.path, response.status_code,
+                          response.content_length))
+    return response
 
 @auth.get_password
 def get_pw(username):
@@ -17,19 +27,18 @@ def get_pw(username):
 class Index(Resource):
 
     def get(self):
-        return {'ping_v1_url': 'http://127.0.0.1:%s/v1/ping{/addr}' %
-                app.config['PORT']}, 200,
-        {'Cache-Control': 'public, max-age=60, s-maxage=60'}
+        return {
+            'ping_url': 'http://%s:%s/ping/:ip' % (request.remote_addr, app.config['PORT'])
+        }, 200, {'Cache-Control': 'public, max-age=60, s-maxage=60'}
 
 
-class PingApiV1(Resource):
+class PingApi(Resource):
 
     @auth.login_required
-    def get(self, addr):
-        result = ping(addr)
-        logger.info('ping %s %s' % (addr, str(result)))
-        return {'addr': addr, 'connect': result}, 200
+    def get(self, ip):
+        result = helper_ping.ping(ip)
+        return {'ip': ip, 'connect': result}, 200
 
 
 api.add_resource(Index, '/')
-api.add_resource(PingApiV1, '/v1/ping/<string:addr>')
+api.add_resource(PingApi, '/ping/<string:ip>')

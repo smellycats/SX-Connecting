@@ -1,11 +1,11 @@
-# -*- coding: cp936 -*-
+# -*- coding: utf-8 -*-
 import os
 import platform
 
 
 def get_os():
     '''
-    get os ÀàÐÍ
+    get os ç±»åž‹
     '''
     os = platform.system()
     if os == "Windows":
