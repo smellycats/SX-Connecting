@@ -15,6 +15,7 @@ def after_request(response):
                           arrow.now().format('DD/MMM/YYYY:HH:mm:ss ZZ'),
                           request.method, request.path, response.status_code,
                           response.content_length))
+    response.headers['Server'] = 'SX-Connecting'
     return response
 
 @auth.get_password
