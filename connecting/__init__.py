@@ -33,13 +33,24 @@ def after_request(response):
                           arrow.now().format('DD/MMM/YYYY:HH:mm:ss ZZ'),
                           request.method, request.path, response.status_code,
                           response.content_length))
-    response.headers['Server'] = 'SX-Connecting'
+    response.headers['Server'] = app.config['HEADER_SERVER']
+    response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return jsonify({'message': 'Not Found'}), 404, {'Content-Type': 'application/json; charset=utf-8'}
+    return jsonify({'message': 'Not Found'}), 404,
+    {'Content-Type': 'application/json; charset=utf-8',
+     'Server': app.config['HEADER_SERVER']}
+
+@app.errorhandler(405)
+def method_not_allow(error):
+    return jsonify({'message': 'Method Not Allowed'}), 405,
+    {'Content-Type': 'application/json; charset=utf-8',
+     'Server': app.config['HEADER_SERVER']}
 
 @app.errorhandler(500)
-def inte_ser_error(error):
-    return jsonify({'message': 'Internal Server Error'}), 500, {'Content-Type': 'application/json; charset=utf-8'}
+def internal_server_error(error):
+    return jsonify({'message': 'Internal Server Error'}), 500,
+    {'Content-Type': 'application/json; charset=utf-8',
+     'Server': app.config['HEADER_SERVER']}
