@@ -18,7 +18,7 @@ class Index(Resource):
 
     def get(self):
         return {
-            'ping_url': '%s/ping{/ip}' % (request.url_root)
+            'ping_url': '%sping{/ip}' % (request.url_root)
         }, 200, {'Cache-Control': 'public, max-age=60, s-maxage=60'}
 
 
