@@ -5,7 +5,8 @@ import arrow
 from flask import Flask, request, jsonify
 from flask_restful import Api
 from flask_httpauth import HTTPBasicAuth, HTTPDigestAuth
-from peewee import SqliteDatabase
+#from flask.ext.limiter import Limiter, HEADERS
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from config import Production
 from my_logger import debug_logging, online_logging, access_logging
@@ -23,7 +24,15 @@ auth = HTTPBasicAuth()
 logger = logging.getLogger('root')
 access_logger = logging.getLogger('access')
 
+##limiter = Limiter(app, headers_enabled=True, global_limits=["10/minute"])
+##limiter.header_mapping = {
+##    HEADERS.LIMIT: "X-RateLimit-Limit",
+##    HEADERS.RESET: "X-RateLimit-Reset",
+##    HEADERS.REMAINING: "X-RateLimit-Remaining"
+##}
+
 import connecting.views
+
 
 @app.after_request
 def after_request(response):
@@ -37,17 +46,20 @@ def after_request(response):
     response.headers['Content-Type'] = 'application/json; charset=utf-8'
     return response
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return jsonify({'message': 'Not Found'}), 404,
     {'Content-Type': 'application/json; charset=utf-8',
      'Server': app.config['HEADER_SERVER']}
 
+
 @app.errorhandler(405)
 def method_not_allow(error):
     return jsonify({'message': 'Method Not Allowed'}), 405,
     {'Content-Type': 'application/json; charset=utf-8',
      'Server': app.config['HEADER_SERVER']}
+
 
 @app.errorhandler(500)
 def internal_server_error(error):

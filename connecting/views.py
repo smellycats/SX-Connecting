@@ -24,7 +24,7 @@ class Index(Resource):
 
 class PingApi(Resource):
 
-    @auth.login_required
+    #@auth.login_required
     def get(self, ip):
         result = helper_ping.ping(ip)
         return {'ip': ip, 'connect': result}, 200
