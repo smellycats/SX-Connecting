@@ -4,10 +4,10 @@
 class Config(object):
     # 密码 string
     SECRET_KEY = 'hellokitty'
+    # 服务器名称
+    HEADER_SERVER = 'SX-Connecting'
     # 用户 dict
     USER = {'kakou': 'pingworker'}
-    # response header Server
-    HEADER_SERVER = 'SX-Connecting'
 
 
 class Develop(Config):

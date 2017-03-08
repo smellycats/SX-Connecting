@@ -1,7 +1,7 @@
 flask>=0.10.1
-Flask-RESTful>=0.3.2
+#Flask-RESTful>=0.3.2
 Flask-HTTPAuth>=2.5.0
-Flask-SQLAlchemy>=2.0
-Flask-Limiter>=0.8.1
+#Flask-SQLAlchemy>=2.0
+#Flask-Limiter>=0.8.1
 arrow>=0.5.4
 requests>=2.5.0
