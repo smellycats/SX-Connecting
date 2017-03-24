@@ -25,3 +25,10 @@ def ping_get(ip):
     result = helper_ping.ping(ip)
     return jsonify({'ip': ip, 'connect': result}), 200
 
+
+@app.route('/server/<string:ip>/<int:port>', methods=['GET'])
+#@limiter.limit("600/minute")
+#@auth.login_required
+def server_get(ip, port):
+    result = helper_ping.check_server(ip, port)
+    return jsonify({'ip': ip, 'port': port, 'status': result}), 200
