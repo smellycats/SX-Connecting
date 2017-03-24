@@ -5,10 +5,13 @@
 ##from url_img_package import online_logging
 ##import logging
 ##import json
-from requests_func import RequestsFunc
+#from requests_func import RequestsFunc
 ##from url_img_package import app
 ##from url_img_package import CleanWorker
 ##
+import socket
+
+
 def model_test():
     db = gl.DB
     db.connect()
@@ -56,9 +59,22 @@ def flask_run_test():
     del ini
     del ps
 
+def check_server(address, port):
+    s = socket.socket()
+    print "attempting to connect to %s on port %s" %(address,port)
+
+    try:
+        s.connect((address,port))
+        print "connected"
+        return True
+    except socket.error,e:
+        print "failed"
+        return False
+
 if __name__ == '__main__':
     #model_test()
     #conf_test()
     #log_test()
-    requests_test()
+    #requests_test()
     #flask_run_test()
+    check_server('127.0.0.1', 80)
